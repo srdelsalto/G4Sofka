@@ -1,5 +1,6 @@
 package co.com.sofka.assessment.tp1;
 
+import co.com.sofka.assessment.tp1.facade.EmployeeFacade;
 import co.com.sofka.assessment.tp1.model.Developer;
 import co.com.sofka.assessment.tp1.model.Employee;
 import co.com.sofka.assessment.tp1.model.Manager;
@@ -7,22 +8,31 @@ import co.com.sofka.assessment.tp1.model.Manager;
 // Clase principal para demostrar el uso
 public class EmployeeSystem {
     public static void main(String[] args) {
+        EmployeeFacade facade = new EmployeeFacade();
+
+        // Crear empleados
         Employee manager = new Manager("Alice", 101, 5000, 2000);
-        Manager manager2 = new Manager("Michael", 104, 2000, 1000);
         Employee developer = new Developer("Bob", 102, 4000, 10, 50);
-        Employee santiagoDeveloper = new Developer("Santiago", 103, 5000, 20, 60);
 
-        System.out.println(manager);
-        System.out.println("Salary with base bonus: " + manager.calculateSalary());
+        // Agregar empleados usando la fachada
+        facade.addEmployee(manager);
+        facade.addEmployee(developer);
 
-        System.out.println(manager2);
-        System.out.println("Salary with Base Bonus: " + manager2.calculateSalary());
-        System.out.println("Salary Bonus with Experience: " + (manager2.calculateSalary() - manager2.calculateBonus() + manager2.calculateBonus(5)));  // 5 years
+        // Calcular y mostrar los salarios
+        System.out.println("=== Salaries ===");
+        facade.calculateAndPrintSalaries();
 
-        System.out.println(developer);
-        System.out.println("Salary: " + developer.calculateSalary());
+        // Actualizar el salario base de un empleado
+        System.out.println("\n=== Update Base Salary ===");
+        boolean updated = facade.updateBaseSalary(101, 5500);
+        if (updated) {
+            System.out.println("Base salary updated successfully.");
+        } else {
+            System.out.println("Employee not found.");
+        }
 
-        System.out.println(santiagoDeveloper);
-        System.out.println("Salary: " + santiagoDeveloper.calculateSalary());
+        // Mostrar los salarios después de la actualización
+        System.out.println("\n=== Salaries After Update ===");
+        facade.calculateAndPrintSalaries();
     }
 }
